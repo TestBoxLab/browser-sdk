@@ -1,4 +1,9 @@
-import { getTargetOrigin, TestBoxConfig } from "./config";
+import {
+  getConfigItem,
+  getTargetOrigin,
+  setConfig,
+  TestBoxConfig,
+} from "./config";
 import { info } from "./utils/logging";
 import {
   isValidIncomingTestBoxMessage,
@@ -20,23 +25,29 @@ export function startTestBox(config?: TestBoxConfig) {
     return;
   }
 
-  window.__tbxConfig = config;
+  setConfig(config);
 
-  if (window.__tbxConfig.navigateHandler) {
-    navigateHandler = window.__tbxConfig.navigateHandler;
+  const _navigateHandler = getConfigItem("navigateHandler");
+  if (typeof _navigateHandler === "function") {
+    navigateHandler = (data) => {
+      return _navigateHandler(data);
+    };
   } else {
     navigateHandler = (data) => {
       window.location.href = data.url;
     };
   }
 
-  if (window.__tbxConfig.loginHandler) {
-    loginHandler = window.__tbxConfig.loginHandler;
+  const _loginHandler = getConfigItem("loginHandler");
+  if (typeof _loginHandler === "function") {
+    loginHandler = async (data) => {
+      return await _loginHandler(data);
+    };
   }
 
   window.addEventListener("message", (ev) => {
     const targetOrigin = getTargetOrigin();
-    if (!ev.origin.includes(targetOrigin)) {
+    if (targetOrigin && !ev.origin.includes(targetOrigin)) {
       info("target-mismatch", {
         messageOrigin: ev.origin,
         targetOrigin: targetOrigin,
