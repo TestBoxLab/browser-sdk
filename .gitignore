@@ -1,4 +1,3 @@
 node_modules
 lib
-static/cdn.js
-
+static/cdn*.js
