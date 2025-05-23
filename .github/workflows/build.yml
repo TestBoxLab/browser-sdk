@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   install-dependencies:
@@ -127,3 +128,20 @@ jobs:
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+     - name: Configure AWS credentials
+       uses: aws-actions/configure-aws-credentials@v4
+       with:
+         role-to-assume: arn:aws:iam::457031429343:role/github-actions-browser-sdk-role
+         aws-region: us-east-1
+     - name: Upload to S3 with versioning
+       run: |
+         # Create version directory based on package version
+         VERSION=$(node -p "require('./package.json').version")
+         # Upload to versioned path
+         aws s3 cp static/cdn.js s3://tbx-assets/browser-sdk/$VERSION/cdn.js --acl public-read
+         # Create a redirect object for "latest" that points to the versioned file
+         aws s3api put-object \
+           --bucket tbx-assets \
+           --key browser-sdk/latest/cdn.js \
+           --website-redirect-location /browser-sdk/$VERSION/cdn.js \
+           --acl public-read
