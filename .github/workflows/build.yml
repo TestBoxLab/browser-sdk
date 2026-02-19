@@ -122,10 +122,11 @@ jobs:
          key: ${{ needs.install-dependencies.outputs.cache-key }}
      - name: Build the package
        run: npm run build
-     - name: Run semantic release bot
+     - name: Set up Node for semantic-release
        uses: actions/setup-node@v3
        with:
-         node-version: 16.14.0
+         node-version: 22.22.0
+     - name: Run semantic release bot
        run: npx semantic-release
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
