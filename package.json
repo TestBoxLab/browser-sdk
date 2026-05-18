@@ -48,10 +48,20 @@
     "access": "public"
   },
   "script": [],
+  "//": [
+    "The 'npm' and 'picomatch' overrides below patch GHSA-jr5w-wmq9-7g6c (picomatch <4.0.4)",
+    "which is bundled deep inside the 'npm' CLI tarball (npm bundles its own dependencies",
+    "via 'bundleDependencies', so Dependabot cannot reach it). Forcing npm to >=11.14.1",
+    "swaps in a tarball that ships picomatch 4.0.4 internally; the picomatch override covers",
+    "the remaining non-bundled copies elsewhere in the tree. Safe to remove once",
+    "@semantic-release/npm's lockfile no longer resolves to npm <11.14.1."
+  ],
   "overrides": {
     "qs": ">=6.14.2 <6.15.0",
     "npm-dts": {
       "tmp": "$tmp"
-    }
+    },
+    "npm": ">=11.14.1 <12.0.0",
+    "picomatch": ">=4.0.4 <5.0.0"
   }
 }
