@@ -52,21 +52,21 @@
     "Overrides patch advisories in transitive devDependencies that Dependabot cannot",
     "reach directly. 'ws', 'http-proxy-middleware' and 'uuid' come via webpack-dev-server",
     "(v6 would drop them but requires Node >=22), 'ip-address' via npm's socks chain,",
-    "'qs' via express/@cypress/request. The 'npm' override exists because npm bundles",
-    "'tar' via bundleDependencies (unreachable by overrides); npm >=11.19.1 ships a fixed",
-    "tar internally. Safe to drop an override once the parent dep resolves a patched",
+    "'qs' via express/@cypress/request. The 'npm' override updates dependencies",
+    "bundled by npm, including tar, brace-expansion, ip-address, postcss-selector-parser",
+    "and undici. Safe to drop an override once the parent dep resolves a patched",
     "version on its own."
   ],
   "overrides": {
-    "qs": ">=6.15.2 <7.0.0",
+    "qs": ">=6.16.1 <7.0.0",
     "ws": ">=8.21.0 <9.0.0",
     "uuid": ">=11.1.1 <12.0.0",
-    "ip-address": ">=10.3.1 <11.0.0",
+    "ip-address": ">=10.7.1 <11.0.0",
     "http-proxy-middleware": ">=2.0.10 <3.0.0",
     "npm-dts": {
       "tmp": "$tmp"
     },
-    "npm": ">=11.19.1 <12.0.0",
+    "npm": ">=11.21.2 <12.0.0",
     "picomatch": ">=4.0.4 <5.0.0"
   }
 }
